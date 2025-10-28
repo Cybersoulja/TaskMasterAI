@@ -8,9 +8,13 @@ import { NonRetriableError } from "inngest";
 import { z } from "zod";
 
 import { sharedPostgresStorage } from "./storage";
-import { inngest, inngestServe } from "./inngest";
+import { inngest, inngestServe, registerCronWorkflow } from "./inngest";
 import { exampleWorkflow } from "./workflows/exampleWorkflow";
 import { exampleAgent } from "./agents/exampleAgent";
+import { wakatimeTool } from "./tools/wakatimeTool";
+import { summarizeTool } from "./tools/summarizeTool";
+import { emailTool } from "./tools/emailTool";
+import { weeklySummaryWorkflow } from "./workflows/weeklySummaryWorkflow";
 
 class ProductionPinoLogger extends MastraLogger {
   protected logger: pino.Logger;
@@ -53,17 +57,22 @@ class ProductionPinoLogger extends MastraLogger {
   }
 }
 
+registerCronWorkflow(
+  `TZ=${process.env.SCHEDULE_CRON_TIMEZONE || "America/Los_Angeles"} ${process.env.SCHEDULE_CRON_EXPRESSION || "0 9 * * 1"}`,
+  weeklySummaryWorkflow
+);
+
 export const mastra = new Mastra({
   storage: sharedPostgresStorage,
   // Register your workflows here
-  workflows: {},
+  workflows: { weeklySummaryWorkflow },
   // Register your agents here
   agents: {},
   mcpServers: {
     allTools: new MCPServer({
       name: "allTools",
       version: "1.0.0",
-      tools: {},
+      tools: { wakatimeTool, summarizeTool, emailTool },
     }),
   },
   bundler: {
