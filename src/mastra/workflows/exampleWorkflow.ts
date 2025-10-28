@@ -15,6 +15,14 @@ import { exampleAgent } from "../agents/exampleAgent";
  * Step 1: Process with Agent
  * This step demonstrates how to use an agent within a workflow
  */
+/**
+ * The first step in the example workflow.
+ * This step uses the `exampleAgent` to process an incoming message.
+ * It takes a message and an optional boolean to include analysis in the prompt.
+ * The step returns the agent's response and some processed data.
+ *
+ * @see https://mastra.io/docs/workflows/steps
+ */
 const processWithAgent = createStep({
   id: "process-with-agent",
   description: "Uses the example agent to process input",
@@ -76,6 +84,14 @@ const processWithAgent = createStep({
 /**
  * Step 2: Output Results
  * This step demonstrates how to handle and output results
+ */
+/**
+ * The second step in the example workflow.
+ * This step takes the results from the `processWithAgent` step, formats them into a readable string,
+ * and then logs the output to the console. In a real-world scenario, this step could be used to
+ * send an email, save to a database, or call an external API.
+ *
+ * @see https://mastra.io/docs/workflows/steps
  */
 const outputResults = createStep({
   id: "output-results",
@@ -156,6 +172,13 @@ ${
 
 /**
  * Create the workflow by chaining steps
+ */
+/**
+ * An example Mastra workflow that demonstrates how to chain multiple steps together.
+ * This workflow takes a message, processes it with an agent, and then formats and outputs the results.
+ * It is a good starting point for understanding how to build more complex workflows.
+ *
+ * @see https://mastra.io/docs/workflows/overview
  */
 export const exampleWorkflow = createWorkflow({
   id: "example-workflow",
