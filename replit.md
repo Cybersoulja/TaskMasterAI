@@ -121,3 +121,11 @@ Preferred communication style: Simple, everyday language.
 - TypeScript 5.9.3+ with strict type checking
 - Prettier for code formatting
 - Mastra CLI (`mastra`) for build and development server
+
+# Next Steps
+
+- **Testing**: Implement unit and integration tests to ensure system reliability. The `npm test` command is configured with `vitest`.
+- **Integrations**: Activate and configure the available third-party integrations (Notion, Slack, Jira) to expand the agent's capabilities.
+- **Deployment**: Configure deployment pipelines for production environments beyond the local development setup.
+- **Observability**: Enhance logging and monitoring by integrating with external observability providers (e.g., OpenTelemetry) for better insights into agent performance and workflow execution.
+- **User Interface**: Build a frontend interface (e.g., using Next.js) to interact with the agents and workflows more intuitively than through the CLI or API directly.
