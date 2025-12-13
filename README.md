@@ -1,42 +1,46 @@
-# Mastra Agent Template
+# Taskmaster AI
 
-This is a template for building AI agents and workflows using [Mastra](https://mastra.io/). It comes with a set of pre-built tools and workflows that can be used as a starting point for your own projects.
+**Taskmaster AI** is a workflow automation system built with the [Mastra](https://mastra.ai) TypeScript agent framework. The application orchestrates AI-powered agents, tools, and workflows to automate tasks like fetching coding statistics from WakaTime, generating summaries using LLMs, and sending email reports. It leverages Inngest for workflow execution and supports both development and production environments with integrated observability and real-time monitoring.
 
-## Getting Started
+## System Architecture
 
-To get started, you'll need to have a [Replit](https://replit.com/) account and have the [Mastra CLI](https://mastra.io/docs/cli) installed.
+### Framework and Core Technologies
 
-1. **Fork this Repl.**
-2. **Install the dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
+- **Mastra Framework**: Built on Mastra v0.20.0, providing primitives for agents, workflows, tools, and memory.
+- **Runtime Environment**: Node.js 20.9.0+ with ES2022 modules and strict TypeScript.
+- **LLM Integration**: Vercel AI SDK for model routing (OpenAI, OpenRouter).
 
-This will start the Mastra development server on `http://localhost:3000`.
+### Agent Architecture
 
-## Available Tools
+- **Agent System**: Agents combine LLM models, system instructions, tools, and memory.
+- **Runtime Context**: Dynamic behavior injection via `RuntimeContext`.
 
-This template comes with the following tools:
+### Workflow System
 
-* **`emailTool`**: Sends an email to a specified recipient.
-* **`exampleTool`**: A simple example tool that demonstrates how to create a Mastra tool.
-* **`summarizeTool`**: Generates a summary of text using an AI model.
-* **`wakatimeTool`**: Fetches coding activity statistics from the WakaTime API.
+- **Workflow Orchestration**: Graph-based engine integrated with Inngest.
+- **Step Pattern**: Typed steps with Zod validation.
+- **Inngest Integration**: Automatic registration of workflows as Inngest functions.
 
-## Available Workflows
+### Tool Architecture
 
-This template comes with the following workflows:
+- **Tool System**: Reusable, typed functions with Zod schema validation.
+- **Examples**: WakaTime integration, LLM summarization, Email delivery.
 
-* **`exampleWorkflow`**: An example workflow that demonstrates how to chain multiple steps together.
-* **`weeklySummaryWorkflow`**: A workflow that automates the process of sending a weekly coding summary email.
+### Storage and Memory
 
-## Available Triggers
+- **PostgreSQL**: Primary storage for workflow state and logs.
+- **LibSQL**: Alternative lightweight storage.
+- **Memory System**: Persists conversation history and user preferences.
 
-This template comes with the following triggers:
+### Logging and Observability
 
-* **`slackTriggers`**: A trigger that listens for messages in a Slack channel.
-* **`telegramTriggers`**: A trigger that listens for messages in a Telegram chat.
+- **Logger**: JSON-formatted structured logging via Pino.
+- **Development Tools**: Mastra Dev Server for testing and debugging.
+
+## Next Steps
+
+- **Testing**: Implement unit and integration tests (e.g., using Vitest or Jest).
+- **Integrations**: Configure Notion, Slack, and Jira integrations.
+- **Deployment**: Set up production deployment pipelines.
+- **Observability**: Integrate with external providers like OpenTelemetry.
+- **User Interface**: Develop a frontend interface (e.g., Next.js).
