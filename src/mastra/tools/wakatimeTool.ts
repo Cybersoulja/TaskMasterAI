@@ -2,6 +2,10 @@ import { createTool } from "@mastra/core/tools";
 import type { IMastraLogger } from "@mastra/core/logger";
 import { z } from "zod";
 
+/**
+ * Represents the structure of the summary data returned from the WakaTime API.
+ * This interface is used to type the return value of the `fetchWakaTimeStats` function.
+ */
 interface WakaTimeSummary {
   data: Array<{
     grand_total: {
@@ -66,6 +70,17 @@ interface WakaTimeSummary {
   }>;
 }
 
+/**
+ * Fetches coding activity statistics from the WakaTime API for a given date range.
+ * Requires the `WAKATIME_API_KEY` environment variable to be set.
+ *
+ * @param {object} params - The parameters for fetching the stats.
+ * @param {string} params.startDate - The start date of the range in 'YYYY-MM-DD' format.
+ * @param {string} params.endDate - The end date of the range in 'YYYY-MM-DD' format.
+ * @param {IMastraLogger} [params.logger] - An optional logger instance.
+ * @returns {Promise<WakaTimeSummary>} A promise that resolves with the WakaTime summary data.
+ * @throws {Error} If the `WAKATIME_API_KEY` is not set or if the API request fails.
+ */
 const fetchWakaTimeStats = async ({
   startDate,
   endDate,
@@ -118,6 +133,14 @@ const fetchWakaTimeStats = async ({
   }
 };
 
+/**
+ * A Mastra tool for fetching coding activity statistics from the WakaTime API.
+ * This tool takes a start and end date, fetches the data from the WakaTime API,
+ * and returns the raw summary data.
+ *
+ * @see https://mastra.io/docs/tools/overview
+ * @see https://wakatime.com/developers
+ */
 export const wakatimeTool = createTool({
   id: "get-wakatime-stats",
   description: `Fetches coding activity statistics from WakaTime for a specified date range. Returns detailed information about coding time, projects, languages, editors, and more.`,

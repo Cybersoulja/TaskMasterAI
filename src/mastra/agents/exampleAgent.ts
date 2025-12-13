@@ -13,6 +13,11 @@ import { exampleTool } from "../tools/exampleTool";
  * - Agents can be used in workflows
  */
 
+/**
+ * An example agent that demonstrates how to create and configure a Mastra agent.
+ * This agent is designed to be a helpful assistant that can use the `exampleTool`
+ * to process messages and provide educational responses about how Mastra works.
+ */
 export const exampleAgent = new Agent({
   // Give your agent a descriptive name
   name: "Example Agent",

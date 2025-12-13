@@ -7,6 +7,13 @@ import { emailTool } from "../tools/emailTool";
 
 const runtimeContext = new RuntimeContext();
 
+/**
+ * The first step in the weekly summary workflow.
+ * This step fetches the coding statistics from the WakaTime API for the last 7 days.
+ * It uses the `wakatimeTool` to perform the API call.
+ *
+ * @see https://mastra.io/docs/workflows/steps
+ */
 const fetchWakaTimeStatsStep = createStep({
   id: "fetch-wakatime-stats",
   description: "Fetches coding statistics from WakaTime for the past 7 days",
@@ -112,6 +119,13 @@ const fetchWakaTimeStatsStep = createStep({
   },
 });
 
+/**
+ * The second step in the weekly summary workflow.
+ * This step takes the raw WakaTime data from the previous step and uses the `summarizeTool`
+ * to generate a human-readable summary of the coding activity.
+ *
+ * @see https://mastra.io/docs/workflows/steps
+ */
 const generateSummaryStep = createStep({
   id: "generate-summary",
   description: "Generates an AI-powered summary of the coding activity",
@@ -208,6 +222,14 @@ const generateSummaryStep = createStep({
   },
 });
 
+/**
+ * The third and final step in the weekly summary workflow.
+ * This step takes the generated summary from the previous step and sends it as an email
+ * to the recipient specified in the `RECIPIENT_EMAIL` environment variable.
+ * It uses the `emailTool` to send the email.
+ *
+ * @see https://mastra.io/docs/workflows/steps
+ */
 const sendEmailStep = createStep({
   id: "send-email",
   description: "Sends the weekly summary via email",
@@ -247,6 +269,17 @@ const sendEmailStep = createStep({
   },
 });
 
+/**
+ * A Mastra workflow that automates the process of sending a weekly coding summary email.
+ * This workflow consists of three steps:
+ * 1. Fetch WakaTime stats for the last 7 days.
+ * 2. Generate an AI-powered summary of the stats.
+ * 3. Send the summary as an email.
+ *
+ * This workflow is designed to be triggered by a cron job.
+ *
+ * @see https://mastra.io/docs/workflows/overview
+ */
 export const weeklySummaryWorkflow = createWorkflow({
   id: "weekly-summary-workflow",
   description:

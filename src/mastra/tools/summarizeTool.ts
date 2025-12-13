@@ -9,6 +9,10 @@ const openai = createOpenAI({
   apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
 });
 
+/**
+ * Represents the structure of the data returned from the WakaTime API.
+ * This interface is used to type the `wakaTimeData` parameter in the `generateSummary` function.
+ */
 interface WakaTimeData {
   data: Array<{
     grand_total: {
@@ -39,6 +43,17 @@ interface WakaTimeData {
   }>;
 }
 
+/**
+ * Generates a human-readable summary of WakaTime coding activity using an AI model.
+ * It processes the raw WakaTime data, aggregates key metrics, and then uses a prompt
+ * to generate a friendly and encouraging report.
+ *
+ * @param {object} params - The parameters for generating the summary.
+ * @param {WakaTimeData} params.wakaTimeData - The raw data fetched from the WakaTime API.
+ * @param {IMastraLogger} [params.logger] - An optional logger instance.
+ * @returns {Promise<string>} A promise that resolves with the AI-generated summary text.
+ * @throws {Error} If the AI text generation fails.
+ */
 const generateSummary = async ({
   wakaTimeData,
   logger,
@@ -136,6 +151,13 @@ Make it conversational and motivating, as if you're a supportive coding buddy re
   }
 };
 
+/**
+ * A Mastra tool for generating a summary of WakaTime coding activity.
+ * This tool takes raw WakaTime data, generates a human-readable summary using an AI model,
+ * and returns the summary text.
+ *
+ * @see https://mastra.io/docs/tools/overview
+ */
 export const summarizeTool = createTool({
   id: "generate-wakatime-summary",
   description: `Generates a friendly, engaging summary of coding activity from WakaTime data using AI. Takes raw WakaTime statistics and creates a human-readable weekly report.`,

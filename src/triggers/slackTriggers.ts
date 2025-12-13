@@ -19,7 +19,10 @@ import { registerApiRoute } from "../mastra/inngest";
 
 export type Methods = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "ALL";
 
-// TODO: Remove when Mastra exports this type.
+/**
+ * Represents a Mastra API route.
+ * @todo Remove when Mastra exports this type.
+ */
 export type ApiRoute =
   | {
       path: string;
@@ -34,6 +37,10 @@ export type ApiRoute =
       middleware?: MiddlewareHandler | MiddlewareHandler[];
     };
 
+/**
+ * Represents the information for a Slack message trigger.
+ * This type is used to pass information about the Slack message that triggered a workflow.
+ */
 export type TriggerInfoSlackOnNewMessage = {
   type: "slack/message.channels";
   params: {
@@ -61,6 +68,14 @@ type DiagnosisStep =
       extra: Record<string, any>;
     };
 
+/**
+ * Creates and authenticates a Slack WebClient.
+ * It retrieves the Slack access token from the Replit Connectors API and uses it to initialize the client.
+ * It also performs an `auth.test` call to verify the token is valid.
+ *
+ * @returns {Promise<{slack: WebClient, auth: AuthTestResponse, user: string | undefined}>} A promise that resolves with an object containing the authenticated Slack client, the auth test response, and the user ID.
+ * @throws {Error} If the Slack connector is not configured or if authentication fails.
+ */
 export async function getClient() {
   let connectionSettings: any;
   async function getAccessToken() {
@@ -123,12 +138,23 @@ export async function getClient() {
 // Keep up to 200 recent events, to prevent duplicates
 const recentEvents: string[] = [];
 
+/**
+ * Type guard to check if an error is a Slack WebAPICallError.
+ * @param {unknown} err - The error to check.
+ * @returns {boolean} True if the error is a WebAPICallError, false otherwise.
+ */
 function isWebAPICallError(err: unknown): err is WebAPICallError {
   return (
     err !== null && typeof err === "object" && "code" in err && "data" in err
   );
 }
 
+/**
+ * Checks if a Slack event has been processed recently to prevent duplicates.
+ * It stores the last 200 event IDs and returns true if the given event ID is in the list.
+ * @param {string} eventName - The ID of the event to check.
+ * @returns {boolean} True if the event is a duplicate, false otherwise.
+ */
 function checkDuplicateEvent(eventName: string) {
   if (recentEvents.includes(eventName)) {
     return true;
@@ -140,6 +166,18 @@ function checkDuplicateEvent(eventName: string) {
   return false;
 }
 
+/**
+ * Creates a function that reacts to a Slack message based on the result of a workflow.
+ * It removes all previous reactions and adds a new one based on the workflow status:
+ * - `white_check_mark` for success
+ * - `x` for failure
+ * - `alarm_clock` for other statuses
+ *
+ * @param {object} params - The parameters for creating the reactor function.
+ * @param {WebClient} params.slack - The authenticated Slack client.
+ * @param {IMastraLogger} params.logger - The logger instance.
+ * @returns {function} A function that takes a channel, timestamp, and workflow result and reacts to the message.
+ */
 function createReactToMessage<
   TState extends z.ZodObject<any>,
   TInput extends z.ZodType<any>,
@@ -218,6 +256,16 @@ function createReactToMessage<
   };
 }
 
+/**
+ * Registers a trigger for Slack messages.
+ * This function sets up a webhook to receive Slack events and a test endpoint to diagnose connection issues.
+ * When a new message is received, it calls the provided handler with the Mastra instance and trigger information.
+ *
+ * @param {object} params - The parameters for registering the trigger.
+ * @param {string} params.triggerType - The type of the trigger, e.g., 'slack/message.channels'.
+ * @param {function} params.handler - The function to call when a new message is received.
+ * @returns {Array<ApiRoute>} An array of API routes to be registered with the server.
+ */
 export function registerSlackTrigger<
   Env extends { Variables: { mastra: Mastra } },
   TState extends z.ZodObject<any>,

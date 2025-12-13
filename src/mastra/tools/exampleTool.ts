@@ -11,8 +11,13 @@ import { z } from "zod";
  * - Always include clear descriptions for the tool and its parameters
  */
 
-// Define the input and output schemas using Zod
-// This provides type safety and validation
+/**
+ * An example tool that demonstrates how to create a Mastra tool.
+ * This tool takes a message and an optional count, processes the message, and returns a result with metadata.
+ * It is used by the `exampleAgent` and `exampleWorkflow` to showcase how to use tools in Mastra.
+ *
+ * @see https://mastra.io/docs/tools/overview
+ */
 export const exampleTool = createTool({
   id: "example-tool",
 
