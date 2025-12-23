@@ -1,4 +1,4 @@
-import { Mastra, type WorkflowResult, type Step } from "@mastra/core";
+import { Mastra, type WorkflowResult, type Step, type ApiRoute } from "@mastra/core";
 import { IMastraLogger } from "@mastra/core/logger";
 import type { z } from "zod";
 import { registerApiRoute } from "../mastra/inngest";
@@ -7,23 +7,6 @@ import { google } from "googleapis";
 import { format } from "node:util";
 import { getToken, setToken } from "../utils/tokenStore";
 import { getLastExecutionTime, setLastExecutionTime } from "../utils/lastExecution";
-
-export type Methods = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "ALL";
-
-// TODO: Remove when Mastra exports this type.
-export type ApiRoute =
-    | {
-        path: string;
-        method: Methods;
-        handler: Handler;
-        middleware?: MiddlewareHandler | MiddlewareHandler[];
-    }
-    | {
-        path: string;
-        method: Methods;
-        createHandler: ({ mastra }: { mastra: Mastra }) => Promise<Handler>;
-        middleware?: MiddlewareHandler | MiddlewareHandler[];
-    };
 
 async function getClient() {
     const client = new OAuth2Client({
