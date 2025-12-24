@@ -1,4 +1,5 @@
-import { Mastra, type WorkflowResult, type Step, type ApiRoute } from "@mastra/core";
+import { Mastra, type WorkflowResult, type Step } from "@mastra/core";
+import type { ApiRoute } from "@mastra/core/server";
 import { IMastraLogger } from "@mastra/core/logger";
 import type { z } from "zod";
 import { registerApiRoute } from "../mastra/inngest";
