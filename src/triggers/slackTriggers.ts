@@ -1,5 +1,6 @@
 import { format } from "node:util";
 import { Mastra, type WorkflowResult, type Step } from "@mastra/core";
+import type { ApiRoute } from "@mastra/core/server";
 import { IMastraLogger } from "@mastra/core/logger";
 import {
   type AuthTestResponse,
@@ -19,23 +20,6 @@ import { registerApiRoute } from "../mastra/inngest";
 
 export type Methods = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "ALL";
 
-/**
- * Represents a Mastra API route.
- * @todo Remove when Mastra exports this type.
- */
-export type ApiRoute =
-  | {
-      path: string;
-      method: Methods;
-      handler: Handler;
-      middleware?: MiddlewareHandler | MiddlewareHandler[];
-    }
-  | {
-      path: string;
-      method: Methods;
-      createHandler: ({ mastra }: { mastra: Mastra }) => Promise<Handler>;
-      middleware?: MiddlewareHandler | MiddlewareHandler[];
-    };
 
 /**
  * Represents the information for a Slack message trigger.
