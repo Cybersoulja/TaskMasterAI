@@ -1,13 +1,18 @@
 import { PostgresStore } from "@mastra/pg";
+import { LibSQLStore } from "@mastra/libsql";
 
 /**
- * A shared PostgreSQL storage instance for the application.
- * This instance is configured to use the `DATABASE_URL` environment variable,
- * falling back to a local PostgreSQL instance if it is not set.
+ * A shared storage instance for the application.
+ * In production (when DATABASE_URL is set), uses PostgreSQL.
+ * In development, uses LibSQL which stores data locally in a .db file.
  *
  * @see https://mastra.io/docs/storage/postgres
+ * @see https://mastra.io/docs/storage/libsql
  */
-export const sharedPostgresStorage = new PostgresStore({
-  connectionString:
-    process.env.DATABASE_URL || "postgresql://localhost:5432/mastra",
-});
+export const sharedPostgresStorage = process.env.DATABASE_URL
+  ? new PostgresStore({
+      connectionString: process.env.DATABASE_URL,
+    })
+  : new LibSQLStore({
+      url: "file:./mastra-dev.db",
+    });
