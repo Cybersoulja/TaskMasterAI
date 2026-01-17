@@ -26,7 +26,7 @@ async function getClient() {
     return client;
 }
 
-async function getRaindrops(client: OAuth2Client) {
+async function getRaindrops(client: OAuth2Client, logger?: IMastraLogger) {
     try {
         const token = await client.getToken();
         const lastExecution = getLastExecutionTime();
@@ -38,12 +38,12 @@ async function getRaindrops(client: OAuth2Client) {
         const data = await response.json();
         return data.items;
     } catch (error) {
-        console.error("Error fetching raindrops:", error);
+        logger?.error("Error fetching raindrops", { error: format(error) });
         return [];
     }
 }
 
-async function getCollections(client: OAuth2Client) {
+async function getCollections(client: OAuth2Client, logger?: IMastraLogger) {
     try {
         const token = await client.getToken();
         const response = await fetch("https://api.raindrop.io/rest/v1/collections", {
@@ -54,7 +54,7 @@ async function getCollections(client: OAuth2Client) {
         const data = await response.json();
         return data.items;
     } catch (error) {
-        console.error("Error fetching collections:", error);
+        logger?.error("Error fetching collections", { error: format(error) });
         return [];
     }
 }
@@ -105,9 +105,9 @@ async function handleWebhook(mastra: Mastra) {
     const logger = mastra.getLogger();
     try {
         const raindropClient = await getClient();
-        const raindrops = await getRaindrops(raindropClient);
+        const raindrops = await getRaindrops(raindropClient, logger);
         if (raindrops.length > 0) {
-            const collections = await getCollections(raindropClient);
+            const collections = await getCollections(raindropClient, logger);
             const collectionMap = new Map(collections.map((c: any) => [c._id, c.title]));
             const sheets = await getGoogleSheetsClient();
             const spreadsheetId = await createSpreadsheet(sheets, "Raindrop.io");
