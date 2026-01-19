@@ -39,7 +39,7 @@
 
 ## Next Steps
 
-- **Testing**: Implement unit and integration tests (using Vitest).
+- **Testing**: Implement unit and integration tests (e.g., using Vitest or Jest).
 - **Integrations**: Configure Notion, Slack, and Jira integrations.
 - **Deployment**: Set up production deployment pipelines.
 - **Observability**: Integrate with external providers like OpenTelemetry.

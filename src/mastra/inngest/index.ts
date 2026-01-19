@@ -11,6 +11,12 @@ const {
   cloneStep,
 } = init(inngest);
 
+/**
+ * Creates a new Mastra workflow with default retry configuration.
+ * In production, workflows will retry up to 3 times. In development, they do not retry.
+ * @param params - The workflow parameters, same as the original `createWorkflow` function from `@mastra/inngest`.
+ * @returns The created workflow.
+ */
 export function createWorkflow(
   params: Parameters<typeof originalCreateWorkflow>[0],
 ): ReturnType<typeof originalCreateWorkflow> {
@@ -28,7 +34,14 @@ export { inngest, createStep, cloneStep };
 
 const inngestFunctions: InngestFunction.Any[] = [];
 
-// Create a middleware for Inngest to be able to route triggers to Mastra directly.
+/**
+ * Registers a Mastra API route and creates an Inngest function to forward requests to it.
+ * This allows Mastra API routes to be triggered by Inngest events.
+ * The Inngest function will forward the request to the local Mastra server.
+ * Retries are implemented for 5xx errors, 429 (Rate-Limit Exceeded), and 408 (Request Timeout).
+ * @param args - The arguments for the original `registerApiRoute` function from `@mastra/core/server`.
+ * @returns The result of the original `registerApiRoute` function.
+ */
 export function registerApiRoute<P extends string>(
   ...args: Parameters<typeof originalRegisterApiRoute<P>>
 ): ReturnType<typeof originalRegisterApiRoute<P>> {
@@ -50,7 +63,7 @@ export function registerApiRoute<P extends string>(
         await step.run("forward request to Mastra", async () => {
           // It is hard to obtain an internal handle on the Hono server,
           // so we just forward the request to the local Mastra server.
-          const response = await fetch(`http://localhost:5000${path}`, {
+          const response = await fetch(`http://localhost:5001${path}`, {
             method: event.data.method,
             headers: event.data.headers,
             body: event.data.body,
@@ -81,6 +94,11 @@ export function registerApiRoute<P extends string>(
   return originalRegisterApiRoute(...args);
 }
 
+/**
+ * Registers a cron job that triggers a Mastra workflow.
+ * @param cronExpression - The cron expression for the schedule.
+ * @param workflow - The Mastra workflow to trigger.
+ */
 export function registerCronWorkflow(cronExpression: string, workflow: any) {
   const f = inngest.createFunction(
     { id: "cron-trigger" },
@@ -94,6 +112,14 @@ export function registerCronWorkflow(cronExpression: string, workflow: any) {
   inngestFunctions.push(f);
 }
 
+/**
+ * Serves the Inngest functions and registers them with the Mastra server.
+ * In production, it uses the Replit domain as the serve host.
+ * In development, it uses `http://localhost:5000`.
+ * @param mastra - The Mastra instance.
+ * @param inngest - The Inngest instance.
+ * @returns The result of the original `inngestServe` function from `@mastra/inngest`.
+ */
 export function inngestServe({
   mastra,
   inngest,
@@ -107,7 +133,7 @@ export function inngestServe({
       serveHost = `https://${process.env.REPLIT_DOMAINS.split(",")[0]}`;
     }
   } else {
-    serveHost = "http://localhost:5000";
+    serveHost = "http://localhost:5001";
   }
   return originalInngestServe({
     mastra,

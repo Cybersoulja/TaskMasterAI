@@ -124,7 +124,7 @@ Preferred communication style: Simple, everyday language.
 
 # Next Steps
 
-- **Testing**: Implement unit and integration tests to ensure system reliability. The `npm test` command is configured with `vitest`.
+- **Testing**: Implement unit and integration tests to ensure system reliability. The current `npm test` command needs to be configured with a testing framework like Vitest or Jest.
 - **Integrations**: Activate and configure the available third-party integrations (Notion, Slack, Jira) to expand the agent's capabilities.
 - **Deployment**: Configure deployment pipelines for production environments beyond the local development setup.
 - **Observability**: Enhance logging and monitoring by integrating with external observability providers (e.g., OpenTelemetry) for better insights into agent performance and workflow execution.

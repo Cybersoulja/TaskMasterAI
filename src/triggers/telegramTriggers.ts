@@ -18,6 +18,16 @@ export type TriggerInfoTelegramOnNewMessage = {
   payload: any;
 };
 
+/**
+ * Registers a trigger for Telegram messages.
+ * This function sets up a webhook to receive Telegram messages.
+ * When a new message is received, it calls the provided handler with the Mastra instance and trigger information.
+ *
+ * @param {object} params - The parameters for registering the trigger.
+ * @param {string} params.triggerType - The type of the trigger, e.g., 'telegram/message'.
+ * @param {function} params.handler - The function to call when a new message is received.
+ * @returns {Array<ApiRoute>} An array of API routes to be registered with the server.
+ */
 export function registerTelegramTrigger({
   triggerType,
   handler,

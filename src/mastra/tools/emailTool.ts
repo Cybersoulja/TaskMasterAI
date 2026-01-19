@@ -3,6 +3,16 @@ import type { IMastraLogger } from "@mastra/core/logger";
 import { z } from "zod";
 import { sendEmail, type SmtpMessage } from "../../utils/replitmail";
 
+/**
+ * Sends an email with the specified content.
+ * @param {object} params - The parameters for sending the email.
+ * @param {string} params.recipientEmail - The email address of the recipient.
+ * @param {string} params.subject - The subject of the email.
+ * @param {string} params.content - The plain text content of the email.
+ * @param {IMastraLogger} [params.logger] - An optional logger instance.
+ * @returns {Promise<object>} A promise that resolves with the result of the email sending operation.
+ * @throws {Error} If the email fails to send.
+ */
 const sendSummaryEmail = async ({
   recipientEmail,
   subject,
@@ -38,6 +48,12 @@ const sendSummaryEmail = async ({
   }
 };
 
+/**
+ * A Mastra tool for sending emails.
+ * This tool can be used by agents and workflows to send emails with a specified recipient, subject, and content.
+ *
+ * @see https://mastra.io/docs/tools/overview
+ */
 export const emailTool = createTool({
   id: "send-email",
   description: `Sends an email to a recipient with a subject and content. Used for delivering reports, summaries, and notifications.`,
