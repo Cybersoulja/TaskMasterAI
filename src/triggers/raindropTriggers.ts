@@ -31,6 +31,10 @@ async function getClient() {
 async function getRaindrops() {
   try {
     const token = getToken();
+    if (!token) {
+      console.error("No Raindrop token found");
+      return [];
+    }
     const lastExecution = getLastExecutionTime();
     const response = await fetch(
       `https://api.raindrop.io/rest/v1/raindrops/0?search=created:>${lastExecution.toISOString()}`,
@@ -41,7 +45,7 @@ async function getRaindrops() {
       },
     );
     const data = await response.json();
-    return data.items;
+    return data.items || [];
   } catch (error) {
     console.error("Error fetching raindrops:", error);
     return [];
@@ -51,6 +55,10 @@ async function getRaindrops() {
 async function getCollections() {
   try {
     const token = getToken();
+    if (!token) {
+      console.error("No Raindrop token found");
+      return [];
+    }
     const response = await fetch(
       "https://api.raindrop.io/rest/v1/collections",
       {
@@ -60,7 +68,7 @@ async function getCollections() {
       },
     );
     const data = await response.json();
-    return data.items;
+    return data.items || [];
   } catch (error) {
     console.error("Error fetching collections:", error);
     return [];
@@ -161,8 +169,10 @@ export function registerRaindropTrigger(): Array<ApiRoute> {
           const client = await getClient();
 
           let host = "http://localhost:5001";
-          if (process.env.REPLIT_DOMAINS) {
-             host = `https://${process.env.REPLIT_DOMAINS.split(",")[0]}`;
+          if (process.env.APP_URL) {
+            host = process.env.APP_URL;
+          } else if (process.env.REPLIT_DOMAINS) {
+            host = `https://${process.env.REPLIT_DOMAINS.split(",")[0]}`;
           }
 
           const token = await client.authorizationCode.getTokenFromCodeRedirect(
