@@ -37,7 +37,7 @@ const fetchWakaTimeStatsStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         languages: z.array(
           z.object({
@@ -48,7 +48,7 @@ const fetchWakaTimeStatsStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         editors: z.array(
           z.object({
@@ -59,7 +59,7 @@ const fetchWakaTimeStatsStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         operating_systems: z.array(
           z.object({
@@ -70,7 +70,7 @@ const fetchWakaTimeStatsStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         categories: z.array(
           z.object({
@@ -81,7 +81,7 @@ const fetchWakaTimeStatsStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         range: z.object({
           start: z.string(),
@@ -90,7 +90,7 @@ const fetchWakaTimeStatsStep = createStep({
           text: z.string(),
           timezone: z.string(),
         }),
-      })
+      }),
     ),
   }),
   execute: async ({ inputData, mastra }) => {
@@ -148,7 +148,7 @@ const generateSummaryStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         languages: z.array(
           z.object({
@@ -159,7 +159,7 @@ const generateSummaryStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         editors: z.array(
           z.object({
@@ -170,7 +170,7 @@ const generateSummaryStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         operating_systems: z.array(
           z.object({
@@ -181,7 +181,7 @@ const generateSummaryStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         categories: z.array(
           z.object({
@@ -192,7 +192,7 @@ const generateSummaryStep = createStep({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         range: z.object({
           start: z.string(),
@@ -201,7 +201,7 @@ const generateSummaryStep = createStep({
           text: z.string(),
           timezone: z.string(),
         }),
-      })
+      }),
     ),
   }),
   outputSchema: z.object({
@@ -292,7 +292,7 @@ export const weeklySummaryWorkflow = createWorkflow({
     response: z.string(),
   }),
 })
-  .then(fetchWakaTimeStatsStep)
-  .then(generateSummaryStep)
-  .then(sendEmailStep)
+  .then(fetchWakaTimeStatsStep as any)
+  .then(generateSummaryStep as any)
+  .then(sendEmailStep as any)
   .commit();

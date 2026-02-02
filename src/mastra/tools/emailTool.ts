@@ -68,9 +68,10 @@ export const emailTool = createTool({
     messageId: z.string(),
     response: z.string(),
   }),
-  execute: async (
-    { context: { recipientEmail, subject, content }, mastra }
-  ) => {
+  execute: async ({
+    context: { recipientEmail, subject, content },
+    mastra,
+  }) => {
     const logger = mastra?.getLogger();
     logger?.info("🔧 [Email Tool] Starting execution", {
       recipientEmail,

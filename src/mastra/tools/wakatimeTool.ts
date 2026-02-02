@@ -91,7 +91,7 @@ const fetchWakaTimeStats = async ({
   logger?: IMastraLogger;
 }) => {
   const apiKey = process.env.WAKATIME_API_KEY;
-  
+
   if (!apiKey) {
     throw new Error("WAKATIME_API_KEY environment variable is not set");
   }
@@ -99,9 +99,9 @@ const fetchWakaTimeStats = async ({
   logger?.info("🔧 [WakaTime] Fetching stats", { startDate, endDate });
 
   const url = `https://wakatime.com/api/v1/users/current/summaries?start=${startDate}&end=${endDate}`;
-  
+
   const base64ApiKey = Buffer.from(apiKey).toString("base64");
-  
+
   try {
     const response = await fetch(url, {
       headers: {
@@ -117,7 +117,7 @@ const fetchWakaTimeStats = async ({
         error: errorText,
       });
       throw new Error(
-        `WakaTime API request failed: ${response.status} ${response.statusText}`
+        `WakaTime API request failed: ${response.status} ${response.statusText}`,
       );
     }
 
@@ -171,7 +171,7 @@ export const wakatimeTool = createTool({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         languages: z.array(
           z.object({
@@ -182,7 +182,7 @@ export const wakatimeTool = createTool({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         editors: z.array(
           z.object({
@@ -193,7 +193,7 @@ export const wakatimeTool = createTool({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         operating_systems: z.array(
           z.object({
@@ -204,7 +204,7 @@ export const wakatimeTool = createTool({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         categories: z.array(
           z.object({
@@ -215,7 +215,7 @@ export const wakatimeTool = createTool({
             text: z.string(),
             hours: z.number(),
             minutes: z.number(),
-          })
+          }),
         ),
         range: z.object({
           start: z.string(),
@@ -224,7 +224,7 @@ export const wakatimeTool = createTool({
           text: z.string(),
           timezone: z.string(),
         }),
-      })
+      }),
     ),
   }),
   execute: async ({ context: { startDate, endDate }, mastra }) => {
