@@ -27,7 +27,7 @@ export const zSmtpMessage = z.object({
         encoding: z
           .enum(["base64", "7bit", "quoted-printable", "binary"])
           .default("base64"),
-      })
+      }),
     )
     .optional()
     .describe("Email attachments"),
@@ -39,7 +39,7 @@ export const zSmtpMessage = z.object({
  *
  * @see zSmtpMessage
  */
-export type SmtpMessage = z.infer<typeof zSmtpMessage>
+export type SmtpMessage = z.infer<typeof zSmtpMessage>;
 
 /**
  * Retrieves the Replit authentication token from environment variables.
@@ -57,7 +57,7 @@ function getAuthToken(): string {
 
   if (!xReplitToken) {
     throw new Error(
-      "No authentication token found. Please set REPL_IDENTITY or ensure you're running in Replit environment."
+      "No authentication token found. Please set REPL_IDENTITY or ensure you're running in Replit environment.",
     );
   }
 
@@ -87,7 +87,7 @@ export async function sendEmail(message: SmtpMessage): Promise<{
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X_REPLIT_TOKEN": authToken,
+        X_REPLIT_TOKEN: authToken,
       },
       body: JSON.stringify({
         to: message.to,
@@ -97,7 +97,7 @@ export async function sendEmail(message: SmtpMessage): Promise<{
         html: message.html,
         attachments: message.attachments,
       }),
-    }
+    },
   );
 
   if (!response.ok) {

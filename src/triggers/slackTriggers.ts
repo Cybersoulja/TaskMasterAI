@@ -20,7 +20,6 @@ import { registerApiRoute } from "../mastra/inngest";
 
 export type Methods = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "ALL";
 
-
 /**
  * Represents the information for a Slack message trigger.
  * This type is used to pass information about the Slack message that triggered a workflow.

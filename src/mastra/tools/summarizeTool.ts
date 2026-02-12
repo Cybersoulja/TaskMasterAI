@@ -71,7 +71,7 @@ const generateSummary = async ({
   // Calculate totals
   const totalSeconds = wakaTimeData.data.reduce(
     (sum, day) => sum + day.grand_total.total_seconds,
-    0
+    0,
   );
   const totalHours = Math.floor(totalSeconds / 3600);
   const totalMinutes = Math.floor((totalSeconds % 3600) / 60);
@@ -82,7 +82,7 @@ const generateSummary = async ({
     day.projects.forEach((project) => {
       projectsMap.set(
         project.name,
-        (projectsMap.get(project.name) || 0) + project.percent
+        (projectsMap.get(project.name) || 0) + project.percent,
       );
     });
   });
@@ -93,7 +93,7 @@ const generateSummary = async ({
     day.languages.forEach((language) => {
       languagesMap.set(
         language.name,
-        (languagesMap.get(language.name) || 0) + language.percent
+        (languagesMap.get(language.name) || 0) + language.percent,
       );
     });
   });
@@ -107,12 +107,18 @@ const generateSummary = async ({
   const topProjects = Array.from(projectsMap.entries())
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
-    .map(([name, percent]) => `${name} (${(percent / wakaTimeData.data.length).toFixed(1)}%)`);
+    .map(
+      ([name, percent]) =>
+        `${name} (${(percent / wakaTimeData.data.length).toFixed(1)}%)`,
+    );
 
   const topLanguages = Array.from(languagesMap.entries())
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
-    .map(([name, percent]) => `${name} (${(percent / wakaTimeData.data.length).toFixed(1)}%)`);
+    .map(
+      ([name, percent]) =>
+        `${name} (${(percent / wakaTimeData.data.length).toFixed(1)}%)`,
+    );
 
   const prompt = `Create a friendly and engaging weekly coding summary report based on the following data:
 
@@ -176,27 +182,27 @@ export const summarizeTool = createTool({
               name: z.string(),
               text: z.string(),
               percent: z.number(),
-            })
+            }),
           ),
           languages: z.array(
             z.object({
               name: z.string(),
               text: z.string(),
               percent: z.number(),
-            })
+            }),
           ),
           editors: z.array(
             z.object({
               name: z.string(),
               text: z.string(),
               percent: z.number(),
-            })
+            }),
           ),
           range: z.object({
             date: z.string(),
             text: z.string(),
           }),
-        })
+        }),
       ),
     }),
   }),

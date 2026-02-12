@@ -59,7 +59,7 @@ class ProductionPinoLogger extends MastraLogger {
 
 registerCronWorkflow(
   `TZ=${process.env.SCHEDULE_CRON_TIMEZONE || "America/Los_Angeles"} ${process.env.SCHEDULE_CRON_EXPRESSION || "0 9 * * 1"}`,
-  weeklySummaryWorkflow
+  weeklySummaryWorkflow,
 );
 
 export const mastra = new Mastra({
