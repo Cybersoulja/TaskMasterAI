@@ -104,21 +104,17 @@ const generateSummary = async ({
     wakaTimeData.data[wakaTimeData.data.length - 1]?.range.date || "N/A";
 
   // Sort and get top items
-  const topProjects = Array.from(projectsMap.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(
-      ([name, percent]) =>
-        `${name} (${(percent / wakaTimeData.data.length).toFixed(1)}%)`,
-    );
+  const getTopItems = (map: Map<string, number>) =>
+    Array.from(map.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(
+        ([name, percent]) =>
+          `${name} (${(percent / wakaTimeData.data.length).toFixed(1)}%)`,
+      );
 
-  const topLanguages = Array.from(languagesMap.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(
-      ([name, percent]) =>
-        `${name} (${(percent / wakaTimeData.data.length).toFixed(1)}%)`,
-    );
+  const topProjects = getTopItems(projectsMap);
+  const topLanguages = getTopItems(languagesMap);
 
   const prompt = `Create a friendly and engaging weekly coding summary report based on the following data:
 
