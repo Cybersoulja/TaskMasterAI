@@ -43,7 +43,7 @@ describe("lastExecution utils", () => {
 
       expect(fs.writeFileSync).toHaveBeenCalledWith(
         "lastExecution.txt",
-        mockDate.toISOString()
+        mockDate.toISOString(),
       );
 
       vi.useRealTimers();

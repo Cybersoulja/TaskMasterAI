@@ -11,6 +11,7 @@ describe("exampleTool", () => {
       context: input,
       suspend: async () => {}, // Mock suspend
       runId: "test-run-id", // Mock runId
+      runtimeContext: {} as any, // Mock runtimeContext
     });
 
     expect(result.processed).toBe("HELLO WORLD");
@@ -28,6 +29,7 @@ describe("exampleTool", () => {
       context: input,
       suspend: async () => {}, // Mock suspend
       runId: "test-run-id", // Mock runId
+      runtimeContext: {} as any, // Mock runtimeContext
     });
 
     expect(result.processed).toBe("TEST");
