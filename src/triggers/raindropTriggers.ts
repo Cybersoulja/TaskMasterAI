@@ -36,7 +36,7 @@ async function getRaindrops(logger?: IMastraLogger) {
       logger?.error("Error fetching raindrops", { error: format(error) });
       return [];
     }
-    const lastExecution = getLastExecutionTime();
+    const lastExecution = await getLastExecutionTime();
     const response = await fetch(
       `https://api.raindrop.io/rest/v1/raindrops/0?search=created:>${lastExecution.toISOString()}`,
       {
@@ -144,7 +144,7 @@ async function handleWebhook(mastra: Mastra) {
       ];
       await addDataToSpreadsheet(sheets, spreadsheetId, data);
     }
-    setLastExecutionTime();
+    await setLastExecutionTime();
   } catch (error) {
     logger?.error("Error handling Raindrop webhook", {
       error: format(error),
