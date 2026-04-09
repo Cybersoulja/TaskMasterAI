@@ -11,6 +11,7 @@ import {
   getLastExecutionTime,
   setLastExecutionTime,
 } from "../utils/lastExecution";
+import type { Context } from "hono";
 
 async function getClient() {
   if (!process.env.RAINDROP_CLIENT_ID || !process.env.RAINDROP_CLIENT_SECRET) {
@@ -28,9 +29,9 @@ async function getClient() {
   return client;
 }
 
-async function getRaindrops(logger?: IMastraLogger) {
+async function getRaindrops(c: Context, logger?: IMastraLogger) {
   try {
-    const token = getToken();
+    const token = getToken(c);
     if (!token) {
       const error = new Error("No Raindrop token found");
       logger?.error("Error fetching raindrops", { error: format(error) });
@@ -53,9 +54,9 @@ async function getRaindrops(logger?: IMastraLogger) {
   }
 }
 
-async function getCollections(logger?: IMastraLogger) {
+async function getCollections(c: Context, logger?: IMastraLogger) {
   try {
-    const token = getToken();
+    const token = getToken(c);
     if (!token) {
       const error = new Error("No Raindrop token found");
       logger?.error("Error fetching collections", { error: format(error) });
@@ -123,12 +124,12 @@ async function addDataToSpreadsheet(
   });
 }
 
-async function handleWebhook(mastra: Mastra) {
+async function handleWebhook(c: Context, mastra: Mastra) {
   const logger = mastra.getLogger();
   try {
-    const raindrops = await getRaindrops(logger);
+    const raindrops = await getRaindrops(c, logger);
     if (raindrops.length > 0) {
-      const collections = await getCollections(logger);
+      const collections = await getCollections(c, logger);
       const collectionMap = new Map(
         collections.map((c: any) => [c._id, c.title]),
       );
@@ -158,7 +159,7 @@ export function registerRaindropTrigger(): Array<ApiRoute> {
       method: "POST",
       handler: async (c) => {
         const mastra = c.get("mastra");
-        await handleWebhook(mastra);
+        await handleWebhook(c, mastra);
         return c.text("OK", 200);
       },
     }),
@@ -183,7 +184,7 @@ export function registerRaindropTrigger(): Array<ApiRoute> {
               redirectUri: `${host}/oauth/callback`,
             },
           );
-          setToken(token);
+          setToken(c, token);
           return c.text("OK", 200);
         } catch (error) {
           logger?.error("Error handling OAuth2 callback", {

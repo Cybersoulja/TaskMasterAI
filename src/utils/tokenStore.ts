@@ -1,9 +1,9 @@
-let token: any = null;
+import type { Context } from 'hono';
 
-export function getToken() {
-  return token;
+export function getToken(c: Context) {
+  return c.get('token');
 }
 
-export function setToken(newToken: any) {
-  token = newToken;
+export function setToken(c: Context, newToken: any) {
+  c.set('token', newToken);
 }
