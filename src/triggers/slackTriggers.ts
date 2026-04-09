@@ -119,7 +119,7 @@ export async function getClient() {
 }
 
 // Keep up to 200 recent events, to prevent duplicates
-const recentEvents: string[] = [];
+const recentEvents = new Set<string>();
 
 /**
  * Type guard to check if an error is a Slack WebAPICallError.
@@ -139,12 +139,15 @@ function isWebAPICallError(err: unknown): err is WebAPICallError {
  * @returns {boolean} True if the event is a duplicate, false otherwise.
  */
 function checkDuplicateEvent(eventName: string) {
-  if (recentEvents.includes(eventName)) {
+  if (recentEvents.has(eventName)) {
     return true;
   }
-  recentEvents.push(eventName);
-  if (recentEvents.length > 200) {
-    recentEvents.shift();
+  recentEvents.add(eventName);
+  if (recentEvents.size > 200) {
+    const [firstEvent] = recentEvents;
+    if (firstEvent !== undefined) {
+      recentEvents.delete(firstEvent);
+    }
   }
   return false;
 }
